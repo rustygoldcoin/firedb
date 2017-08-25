@@ -1,0 +1,27 @@
+{
+    "name": "ua1-labs/firedb",
+    "description": "A Simple NoSQL Database Written In PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joshua L Johnson",
+            "email": "josh@ua1.us"
+        }
+    ],
+    "keywords": [
+        "database",
+        "nosql",
+        "firestudio",
+        "firedb",
+        "flatfile",
+        "flat",
+        "db"
+    ],
+    "type": "library",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "firedb\\": "src/"
+        }
+    }
+}
