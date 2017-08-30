@@ -1,7 +1,6 @@
 <?php
 namespace firedb;
 
-use DateTime;
 use firedb\collection\helper\filesystem;
 use firedb\collection\logic\indexing;
 use firedb\collection\logic\query;
@@ -74,7 +73,7 @@ class collection {
      * Inserts a document into the collection.
      * @param object $document The document you want to store
      * @return object The document updated with collection properties like "__id", "__revision", and "__created"
-     * @throws FireDbException If $document is not an object
+     * @throws firedb\FireDbException If $document is not an object
      *
      * Example:
      * $document = (object) [
@@ -91,7 +90,7 @@ class collection {
      * @param string $id The ID of the document you would like to update
      * @param object $document The document you want to store
      * @return object The document updated with collection properties like "__id", "__revision", and "__created"
-     * @throws FireDbException If $document is not an object
+     * @throws firedb\FireDbException If $document is not an object
      *
      * Example:
      * $document = (object) [

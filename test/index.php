@@ -14,8 +14,8 @@ $indexable = [
     'rand'
 ];
 $test->setIndexable($indexable);
-
-// for ($i = 0; $i < 500000; $i++) {
+//
+// for ($i = 0; $i < 10000; $i++) {
 //     // sleep(1);
 //     $start = microtime(true);
 //     $doc = (object) [
@@ -34,10 +34,10 @@ $test->setIndexable($indexable);
 // }
 
 $filter = (object) [
-    'rand' => 1
+    'rand' => 2
 ];
 
-$result = $test->find($filter, 0, 10, true);
+$result = $test->find(null, 0, 10);
 var_dump($result);
 var_dump(count($result));
 
