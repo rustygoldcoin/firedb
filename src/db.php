@@ -12,6 +12,10 @@ class db {
      */
     protected $_dbDir;
 
+    /**
+     * An array of collection objects.
+     * @var array
+     */
     protected $_collections;
 
     /**

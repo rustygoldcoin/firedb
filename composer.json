@@ -21,7 +21,8 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "firedb\\": "src/"
+            "firedb\\": "src/",
+            "firetest\\": "firetest/"
         }
     }
 }
