@@ -56,7 +56,7 @@ class db {
      */
     public function has($collectionName) {
         $collectionDir = $this->_getCollectionDir($collectionName);
-        return file_exists($collectionDir) && is_dir($collectionDir) && is_writeable($collectionDir);
+        return file_exists($collectionDir) && is_dir($collectionDir);
     }
 
     /**

@@ -10,6 +10,11 @@ class DatabaseIntegrationTests extends testcase {
     private $_collectionDir;
     private $_db;
 
+    /**
+     * Runs before each test is carried out. Sets up the environment by clearing out the
+     * database collections from the last test.
+     * @return void
+     */
     public function beforeEach() {
         $this->_collectionDir = __DIR__ . '/collections';
         if (is_dir($this->_collectionDir)) {
@@ -19,10 +24,18 @@ class DatabaseIntegrationTests extends testcase {
         $this->_db = new db($this->_collectionDir);
     }
 
+    /**
+     * Runs after each test is carried out. Removes the last tests database collection.
+     * @return void
+     */
     public function afterEach() {
         $this->_removeDir($this->_collectionDir);
     }
 
+    /**
+     * Tests all possiblities of what could happen when trying to construct a new database object.
+     * @return void
+     */
     public function testConnectionToDatabase() {
         try {
             $db = new db(__DIR__ . '/nondirectory');
@@ -34,6 +47,11 @@ class DatabaseIntegrationTests extends testcase {
         $db = new db($this->_collectionDir);
         $should = 'We Should retrieve a database object if db directory exists.';
         $this->assert($db instanceof db, $should);
+    }
+
+
+    public function testDatabaseHasCollection() {
+
     }
 
     public function testConnectionToCollection() {
@@ -75,6 +93,10 @@ class DatabaseIntegrationTests extends testcase {
         $this->assert(isset($result->__timestamp), $should);
         $should = 'When we insert a document, we should always get a document back with an __revision appended.';
         $this->assert(isset($result->__revision), $should);
+    }
+
+    public function testFindDocumentById() {
+        
     }
 
     private function _removeDir($dir) {

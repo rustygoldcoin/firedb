@@ -14,9 +14,18 @@ class suite {
 
     private $_testClasses;
 
+    private $_totalPassCount;
+
+    private $_totalFailCount;
+
+    private $_allFailedTests;
+
     public function __construct($dir) {
         $this->_dir = $dir;
         $this->_testClasses = [];
+        $this->_totalPassCount = 0;
+        $this->_totalFailCount = 0;
+        $this->_allFailedTests = [];
         $this->_loadTestFiles();
     }
 
@@ -27,36 +36,61 @@ class suite {
             $testMethods = $testClass->getTestMethods();
             foreach ($testMethods as $testMethod) {
                 $testClass->beforeEach();
-                $this->_log('***Running ' . get_class($testClass) . '::' . $testMethod . '()');
-                $this->_log('*');
+                $testName = get_class($testClass) . '::' . $testMethod . '()';
+                $this->_log('[RUNNING] ' . $testName);
                 $testClass->{$testMethod}();
 
                 $results = $testClass->getResults();
                 $testClass->resetResults();
                 $fails = $results['failed'];
-                if (count($fails) > 0) {
+                $failedCount = count($fails);
+                $this->_totalFailCount += $failedCount;
+                if ($failedCount > 0) {
                     foreach ($fails as $failed) {
-                        $this->_log('* [FAILED] ' . $failed);
+                        $this->_allFailedTests[] = $failed;
+                        $this->_log('[FAILED] ' . $failed);
                     }
                 }
                 $passes = $results['passed'];
-                if (count($passes) > 0) {
+                $passedCount = count($passes);
+                $this->_totalPassCount += $passedCount;
+                if ($passedCount > 0) {
                     foreach ($passes as $passed) {
-                        $this->_log('* [PASSED] ' . $passed);
+                        $this->_log('[PASSED] ' . $passed);
                     }
                 }
-                $this->_log('*');
                 $passFail = (count($fails) === 0) ? 'PASSED' : 'FAILED';
-                $this->_log(
-                    '***' . $passFail . ' | (Passed: '. count($results['passed'])
-                    . ', Failed: '
-                    . count($results['failed']) . ')'
-                    . ' | ' . get_class($testClass) . '::' . $testMethod . '()'
-                );
+
+                $this->_log('[RESULT] (Passed: '. $passedCount . ', Failed: ' . $failedCount . ')');
                 $testClass->afterEach();
             }
             $testClass->tearDown();
         }
+        if ($this->_totalFailCount > 0) {
+            $this->_log('********************************************');
+            $this->_log('███████╗ █████╗ ██╗██╗     ███████╗██████╗');
+            $this->_log('██╔════╝██╔══██╗██║██║     ██╔════╝██╔══██╗');
+            $this->_log('█████╗  ███████║██║██║     █████╗  ██║  ██║');
+            $this->_log('██╔══╝  ██╔══██║██║██║     ██╔══╝  ██║  ██║');
+            $this->_log('██║     ██║  ██║██║███████╗███████╗██████╔╝');
+            $this->_log('╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝');
+            $i = 0;
+            foreach ($this->_allFailedTests as $failedTest) {
+                $this->_log('[#' . $i . '] ' . $failedTest);
+                $i++;
+            }
+            $this->_log('********************************************');
+        } else {
+            $this->_log('***********************************************************');
+            $this->_log('███████╗██╗   ██╗ ██████╗ ██████╗███████╗███████╗███████╗');
+            $this->_log('██╔════╝██║   ██║██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝');
+            $this->_log('███████╗██║   ██║██║     ██║     █████╗  ███████╗███████╗');
+            $this->_log('╚════██║██║   ██║██║     ██║     ██╔══╝  ╚════██║╚════██║');
+            $this->_log('███████║╚██████╔╝╚██████╗╚██████╗███████╗███████║███████║');
+            $this->_log('╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝');
+            $this->_log('***********************************************************');
+        }
+        $this->_log('[FINAL] (Passed: '. $this->_totalPassCount . ', Failed: ' . $this->_totalFailCount . ')');
 
     }
 
