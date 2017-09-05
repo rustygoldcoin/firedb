@@ -118,6 +118,7 @@ class collection {
      * Sets what properties should be allowed to be indexed on objects you are inserting/updating into the collection.
      * @param array $indexable An array of properties that should be indexed
      * @return void
+     * @throws firedb\FireDbException If $indexable is not an array
      *
      * Example:
      * $indexable = [

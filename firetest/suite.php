@@ -27,7 +27,7 @@ class suite {
             $testMethods = $testClass->getTestMethods();
             foreach ($testMethods as $testMethod) {
                 $testClass->beforeEach();
-                $this->_log('*** Running ' . get_class($testClass) . '::' . $testMethod . '()');
+                $this->_log('***Running ' . get_class($testClass) . '::' . $testMethod . '()');
                 $this->_log('*');
                 $testClass->{$testMethod}();
 
@@ -48,7 +48,7 @@ class suite {
                 $this->_log('*');
                 $passFail = (count($fails) === 0) ? 'PASSED' : 'FAILED';
                 $this->_log(
-                    '*** ' . $passFail . ' | (Passed: '. count($results['passed'])
+                    '***' . $passFail . ' | (Passed: '. count($results['passed'])
                     . ', Failed: '
                     . count($results['failed']) . ')'
                     . ' | ' . get_class($testClass) . '::' . $testMethod . '()'

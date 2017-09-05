@@ -116,6 +116,7 @@ class indexing {
      * @return void
      */
     public function indexDocument($document) {
+        $metaData = $this->_filesystem->getCollectionMetaData();
         $registry = $metaData->registry;
         foreach (get_object_vars($document) as $property => $value) {
             if (
