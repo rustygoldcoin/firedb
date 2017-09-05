@@ -92,6 +92,10 @@ class suite {
         }
         $this->_log('[FINAL] (Passed: '. $this->_totalPassCount . ', Failed: ' . $this->_totalFailCount . ')');
 
+        if ($this->_totalFailCount > 0) {
+            exit(1);
+        }
+
     }
 
     private function _loadTestFiles() {

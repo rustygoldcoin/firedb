@@ -96,7 +96,7 @@ class DatabaseIntegrationTests extends testcase {
     }
 
     public function testFindDocumentById() {
-        
+
     }
 
     private function _removeDir($dir) {
