@@ -30,14 +30,14 @@ class suite {
     }
 
     public function run() {
-        $this->_log('Starting test suite located at "' . $this->_dir . '".');
+        $this->log('Starting test suite located at "' . $this->_dir . '".');
         foreach($this->_testClasses as $testClass) {
             $testClass->setUp();
             $testMethods = $testClass->getTestMethods();
             foreach ($testMethods as $testMethod) {
                 $testClass->beforeEach();
                 $testName = get_class($testClass) . '::' . $testMethod . '()';
-                $this->_log('[RUNNING] ' . $testName);
+                $this->log('[RUNNING] ' . $testName);
                 $testClass->{$testMethod}();
 
                 $results = $testClass->getResults();
@@ -48,7 +48,7 @@ class suite {
                 if ($failedCount > 0) {
                     foreach ($fails as $failed) {
                         $this->_allFailedTests[] = $failed;
-                        $this->_log('[FAILED] ' . $failed);
+                        $this->log('[FAILED] ' . $failed);
                     }
                 }
                 $passes = $results['passed'];
@@ -56,41 +56,41 @@ class suite {
                 $this->_totalPassCount += $passedCount;
                 if ($passedCount > 0) {
                     foreach ($passes as $passed) {
-                        $this->_log('[PASSED] ' . $passed);
+                        $this->log('[PASSED] ' . $passed);
                     }
                 }
                 $passFail = (count($fails) === 0) ? 'PASSED' : 'FAILED';
 
-                $this->_log('[RESULT] (Passed: '. $passedCount . ', Failed: ' . $failedCount . ')');
+                $this->log('[RESULT] (Passed: '. $passedCount . ', Failed: ' . $failedCount . ')');
                 $testClass->afterEach();
             }
             $testClass->tearDown();
         }
         if ($this->_totalFailCount > 0) {
-            $this->_log('********************************************');
-            $this->_log('███████╗ █████╗ ██╗██╗     ███████╗██████╗');
-            $this->_log('██╔════╝██╔══██╗██║██║     ██╔════╝██╔══██╗');
-            $this->_log('█████╗  ███████║██║██║     █████╗  ██║  ██║');
-            $this->_log('██╔══╝  ██╔══██║██║██║     ██╔══╝  ██║  ██║');
-            $this->_log('██║     ██║  ██║██║███████╗███████╗██████╔╝');
-            $this->_log('╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝');
+            $this->log('********************************************');
+            $this->log('███████╗ █████╗ ██╗██╗     ███████╗██████╗');
+            $this->log('██╔════╝██╔══██╗██║██║     ██╔════╝██╔══██╗');
+            $this->log('█████╗  ███████║██║██║     █████╗  ██║  ██║');
+            $this->log('██╔══╝  ██╔══██║██║██║     ██╔══╝  ██║  ██║');
+            $this->log('██║     ██║  ██║██║███████╗███████╗██████╔╝');
+            $this->log('╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝');
             $i = 0;
             foreach ($this->_allFailedTests as $failedTest) {
-                $this->_log('[#' . $i . '] ' . $failedTest);
+                $this->log('[#' . $i . '] ' . $failedTest);
                 $i++;
             }
-            $this->_log('********************************************');
+            $this->log('********************************************');
         } else {
-            $this->_log('***********************************************************');
-            $this->_log('███████╗██╗   ██╗ ██████╗ ██████╗███████╗███████╗███████╗');
-            $this->_log('██╔════╝██║   ██║██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝');
-            $this->_log('███████╗██║   ██║██║     ██║     █████╗  ███████╗███████╗');
-            $this->_log('╚════██║██║   ██║██║     ██║     ██╔══╝  ╚════██║╚════██║');
-            $this->_log('███████║╚██████╔╝╚██████╗╚██████╗███████╗███████║███████║');
-            $this->_log('╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝');
-            $this->_log('***********************************************************');
+            $this->log('***********************************************************');
+            $this->log('███████╗██╗   ██╗ ██████╗ ██████╗███████╗███████╗███████╗');
+            $this->log('██╔════╝██║   ██║██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝');
+            $this->log('███████╗██║   ██║██║     ██║     █████╗  ███████╗███████╗');
+            $this->log('╚════██║██║   ██║██║     ██║     ██╔══╝  ╚════██║╚════██║');
+            $this->log('███████║╚██████╔╝╚██████╗╚██████╗███████╗███████║███████║');
+            $this->log('╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝');
+            $this->log('***********************************************************');
         }
-        $this->_log('[FINAL] (Passed: '. $this->_totalPassCount . ', Failed: ' . $this->_totalFailCount . ')');
+        $this->log('[FINAL] (Passed: '. $this->_totalPassCount . ', Failed: ' . $this->_totalFailCount . ')');
 
         if ($this->_totalFailCount > 0) {
             exit(1);
@@ -117,7 +117,7 @@ class suite {
         }
     }
 
-    private function _log($text) {
+    public static function log($text) {
         if (php_sapi_name() == "cli") {
             echo 'FireTest Log: ' . $text . "\n";
         } else {
