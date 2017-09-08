@@ -6,7 +6,7 @@ use firedb\FireDbException;
 use firedb\db;
 use firedb\collection;
 
-class DatabaseIntegrationTests extends testcase {
+class DatabaseIntegration extends testcase {
 
     /**
      * The collection directory.
@@ -25,7 +25,7 @@ class DatabaseIntegrationTests extends testcase {
      * @return void
      */
     public function beforeEach() {
-        $this->_collectionDir = __DIR__ . '/collections';
+        $this->_collectionDir = __DIR__ . '/../collections';
         if (is_dir($this->_collectionDir)) {
             $this->_removeDir($this->_collectionDir);
         }
@@ -188,6 +188,7 @@ class DatabaseIntegrationTests extends testcase {
 }
 
     private function _insertFiveThousandDocuments() {
+        suite::log('Inserting 5000 Documents Into Database...');
         $collection = $this->_db->collection('myCollection');
         $ones = 0;
         for ($i = 0; $i < 5000; $i++) {
@@ -201,7 +202,7 @@ class DatabaseIntegrationTests extends testcase {
             }
             $doc = $collection->insert($document);
         }
-        suite::log('[INSERT] ' . $i . ' Documents');
+        suite::log('[Done]');
         return $ones;
     }
 

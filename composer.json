@@ -19,9 +19,12 @@
     ],
     "type": "library",
     "scripts": {
-        "test": "php test/suite.php"
+        "test": "php vendor/ua1-labs/firetest/scripts/runner.php src"
     },
     "require": {},
+    "require-dev": {
+        "ua1-labs/firetest": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "firedb\\": "src/",

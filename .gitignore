@@ -1,3 +1,4 @@
-test/collections
 vendor
 composer.phar
+composer.lock
+collections
