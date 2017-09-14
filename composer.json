@@ -15,7 +15,8 @@
         "firedb",
         "flatfile",
         "flat",
-        "db"
+        "db",
+        "fire"
     ],
     "type": "library",
     "scripts": {
@@ -27,8 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "firedb\\": "src/",
-            "firetest\\": "firetest/"
+            "Fire\\": "src/"
         }
     }
 }

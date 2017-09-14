@@ -1,7 +1,10 @@
 <?php
 
-namespace firedb;
+namespace Fire;
 
 use Exception;
 
-class FireDbException extends Exception {}
+class FireDbException extends Exception
+{
+
+}

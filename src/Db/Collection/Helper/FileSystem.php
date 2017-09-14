@@ -1,6 +1,6 @@
 <?php
 
-namespace firedb\collection\helper;
+namespace Fire\Db\Collection\Helper;
 
 use DateTime;
 
@@ -8,7 +8,8 @@ use DateTime;
  * This is a helper class to model the filesystem and handle reads/writes for the collection.
  */
 
-class filesystem {
+class FileSystem
+{
 
     /**
      * Constants
@@ -58,7 +59,8 @@ class filesystem {
      * The Constructor
      * @param string $directory The location of the directory where the collection exists
      */
-    public function __construct($directory) {
+    public function __construct($directory)
+    {
         $this->_dir = $directory;
         $this->_metaFile = $this->_dir . self::FILE_META;
         $this->_indexDir = $this->_dir . self::DIRECTORY_INDEX;
@@ -89,7 +91,8 @@ class filesystem {
      * Determines if collection meta data exists.
      * @return boolean
      */
-    public function collectionMetaDataExists() {
+    public function collectionMetaDataExists()
+    {
         return file_exists($this->_metaFile);
     }
 
@@ -97,7 +100,8 @@ class filesystem {
      * Returns meta data from the filesystem.
      * @return object
      */
-    public function getCollectionMetaData() {
+    public function getCollectionMetaData()
+    {
         if (!$this->_metaData) {
             $this->_metaData = $this->_getPhpObjectFile($this->_metaFile);
         }
@@ -109,7 +113,8 @@ class filesystem {
      * @param object $metaData
      * @return void
      */
-    public function writeCollectionMetaData($metaData) {
+    public function writeCollectionMetaData($metaData)
+    {
         $this->_meataData = false;
         $this->_writePhpObjectFile($this->_metaFile, $metaData);
     }
@@ -119,7 +124,8 @@ class filesystem {
      * @param string $documentId
      * @return boolean
      */
-    public function documentExists($documentId) {
+    public function documentExists($documentId)
+    {
         return file_exists($this->_metaDir . '/' . $documentId);
     }
 
@@ -128,7 +134,8 @@ class filesystem {
      * @param  string $documentId
      * @return string
      */
-    public function getDocumentMetaData($documentId) {
+    public function getDocumentMetaData($documentId)
+    {
         $documentMetaFilePath = $this->_metaDir . '/' . $documentId;
         return $this->_getFile($documentMetaFilePath);
     }
@@ -139,7 +146,8 @@ class filesystem {
      * @param string $documentMetaFile
      * @return void
      */
-    public function writeDocumentMetaData($documentId, $documentMetaFile) {
+    public function writeDocumentMetaData($documentId, $documentMetaFile)
+    {
         $documentMetaFilePath = $this->_metaDir . '/' . $documentId;
         $this->_writeFile($documentMetaFilePath, $documentMetaFile);
     }
@@ -149,7 +157,8 @@ class filesystem {
      * @param string $documentId
      * @return void
      */
-    public function deleteDocumentMetaData($documentId) {
+    public function deleteDocumentMetaData($documentId)
+    {
         if($this->documentExists($documentId)) {
             unlink($this->_metaDir . '/' . $documentId);
         }
@@ -161,7 +170,8 @@ class filesystem {
      * @param string $revision
      * @return object
      */
-    public function getDocument($documentId, $revision = null) {
+    public function getDocument($documentId, $revision = null)
+    {
         if ($this->documentExists($documentId)) {
             if (is_null($revision)) {
                 $revision = $this->getDocumentMetaData($documentId);
@@ -180,7 +190,8 @@ class filesystem {
      * @param object $document
      * @return object
      */
-    public function writeDocument($documendId, $document) {
+    public function writeDocument($documendId, $document)
+    {
         $documentId = (!is_null($documendId)) ? $documendId : $this->generateUniqueId();
         $revision = $this->_generateRevisionNumber();
         $created = $this->_generateTimestamp();
@@ -198,7 +209,8 @@ class filesystem {
      * @param string $indexId
      * @return boolean
      */
-    public function indexExists($indexId) {
+    public function indexExists($indexId)
+    {
         $indexFile = $this->_indexDir . '/' . $indexId;
         return file_exists($indexFile);
     }
@@ -208,7 +220,8 @@ class filesystem {
      * @param  string $indexId
      * @return string
      */
-    public function getIndex($indexId) {
+    public function getIndex($indexId)
+    {
         if ($this->indexExists($indexId)) {
             $indexFile = $this->_indexDir . '/' . $indexId;
             return $this->_getFile($indexFile);
@@ -223,7 +236,8 @@ class filesystem {
      * @param string $index
      * @return void
      */
-    public function writeIndex($indexId, $index) {
+    public function writeIndex($indexId, $index)
+    {
         $indexFile = $this->_indexDir . '/' . $indexId;
         $this->_writeFile($indexFile, $index);
     }
@@ -232,7 +246,8 @@ class filesystem {
      * Generates a unique id.
      * @return string
      */
-    public function generateUniqueId() {
+    public function generateUniqueId()
+    {
         $rand = uniqid(rand(10, 99));
         $time = microtime(true);
         $micro = sprintf('%06d', ($time - floor($time)) * 1000000);
@@ -246,7 +261,8 @@ class filesystem {
      * @param string $phpObjectFilePath
      * @return object
      */
-    private function _getPhpObjectFile($phpObjectFilePath) {
+    private function _getPhpObjectFile($phpObjectFilePath)
+    {
         return unserialize($this->_getFile($phpObjectFilePath));
     }
 
@@ -256,7 +272,8 @@ class filesystem {
      * @param object $phpObj
      * @return void
      */
-    private function _writePhpObjectFile($phpObjectFilePath, $phpObj) {
+    private function _writePhpObjectFile($phpObjectFilePath, $phpObj)
+    {
         $this->_writeFile($phpObjectFilePath, serialize($phpObj));
     }
 
@@ -265,9 +282,10 @@ class filesystem {
      * @param string $jsonFilePath
      * @return object
      */
-   private function _getJsonFile($jsonFilePath) {
-       return json_decode($this->_getFile($jsonFilePath));
-   }
+    private function _getJsonFile($jsonFilePath)
+    {
+        return json_decode($this->_getFile($jsonFilePath));
+    }
 
    /**
     * Writes a JSON file to the filesystem.
@@ -275,18 +293,20 @@ class filesystem {
     * @param object $jsonObj
     * @return void
     */
-   private function _writeJsonFile($jsonFilePath, $jsonObj) {
-       $this->_writeFile($jsonFilePath, json_encode($jsonObj));
-   }
+    private function _writeJsonFile($jsonFilePath, $jsonObj)
+    {
+        $this->_writeFile($jsonFilePath, json_encode($jsonObj));
+    }
 
    /**
     * Returns a file from the filesystem.
     * @param string $filePath
     * @return string
     */
-   private function _getFile($filePath) {
-       return file_get_contents($filePath);
-   }
+    private function _getFile($filePath)
+    {
+        return file_get_contents($filePath);
+    }
 
    /**
     * Writes a file to the filesystem.
@@ -294,30 +314,33 @@ class filesystem {
     * @param string $file
     * @return void
     */
-   private function _writeFile($filePath, $file) {
-       $success = file_put_contents($filePath, $file);
-       if ($success === false) {
-           $this->_writeFile($filePath, $file);
-       }
-   }
+    private function _writeFile($filePath, $file)
+    {
+        $success = file_put_contents($filePath, $file);
+        if ($success === false) {
+            $this->_writeFile($filePath, $file);
+        }
+    }
 
    /**
     * Generates a revision number.
     * @return number
     */
-   private function _generateRevisionNumber() {
-       return rand(1000001, 9999999);
-   }
+    private function _generateRevisionNumber()
+    {
+        return rand(1000001, 9999999);
+    }
 
    /**
     * Generates a timestamp.
     * @return string
     */
-   private function _generateTimestamp() {
-       $time = microtime(true);
-       $micro = sprintf('%06d', ($time - floor($time)) * 1000000);
-       $date = new DateTime(date('Y-m-d H:i:s.' . $micro, $time));
-       return $date->format("Y-m-d H:i:s.u");
-   }
+    private function _generateTimestamp()
+    {
+        $time = microtime(true);
+        $micro = sprintf('%06d', ($time - floor($time)) * 1000000);
+        $date = new DateTime(date('Y-m-d H:i:s.' . $micro, $time));
+        return $date->format("Y-m-d H:i:s.u");
+    }
 
 }

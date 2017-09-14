@@ -1,12 +1,12 @@
 <?php
 
-use firetest\suite;
-use firetest\testcase;
-use firedb\FireDbException;
-use firedb\db;
-use firedb\collection;
+use Fire\Test\Suite;
+use Fire\Test\TestCase;
+use Fire\FireDbException;
+use Fire\Db;
+use Fire\Db\Collection;
 
-class DatabaseIntegration extends testcase {
+class FireDbIntegration extends TestCase {
 
     /**
      * The collection directory.
@@ -15,7 +15,7 @@ class DatabaseIntegration extends testcase {
     private $_collectionDir;
 
     /**
-     * @var firedb\db
+     * @var Fire\Db
      */
     private $_db;
 
@@ -30,7 +30,7 @@ class DatabaseIntegration extends testcase {
             $this->_removeDir($this->_collectionDir);
         }
         mkdir($this->_collectionDir);
-        $this->_db = new db($this->_collectionDir);
+        $this->_db = new Db($this->_collectionDir);
     }
 
     /**
@@ -80,7 +80,7 @@ class DatabaseIntegration extends testcase {
     public function testConnectionToCollection() {
         $collection = $this->_db->collection('myCollection');
         $should = 'We should always receive back a collection object when we connect to a collection.';
-        $this->assert($collection instanceof collection, $should);
+        $this->assert($collection instanceof Collection, $should);
     }
 
     /**
@@ -185,10 +185,63 @@ class DatabaseIntegration extends testcase {
         $should = 'When we try filter a collection by random number 1s generated, '
             . 'we should retrieve the same amount of documents back that were inserted.';
         $this->assert($onesCount === $countOnesInserted, $should);
-}
+
+        $lastIndex = 5001;
+        $reverseOrderTestPassed = true;
+        $firstIndex = $result[0]->index;
+        $secondIndex = $result[1]->index;
+        foreach ($result as $document) {
+            if ($document->index >= $lastIndex) {
+                $reverseOrderTestPassed = false;
+            }
+            $lastIndex = $document->index;
+        }
+        $should = 'When we try to filter a collection, we should retrieve them in reverse order by default.';
+        $this->assert($reverseOrderTestPassed, $should);
+
+        $result = $collection->find($filter, 0, 10);
+        $should = 'When we try to filter a collection, we should only get back the amount of documents we request.';
+        $this->assert(count($result) === 10, $should);
+        $should = 'When we try to filter a collection, and when we ask to offset the collection at 0, we'
+            . ' should get back the 2nd item in the collection.';
+        $this->assert($result[0]->index === $firstIndex, $should);
+
+        $result = $collection->find($filter, 1, 10);
+        $should = 'When we try to filter a collection, and when we ask to offset the collection at 1, we'
+            . ' should get back the 2nd item in the collection.';
+        $this->assert($result[0]->index === $secondIndex, $should);
+
+        $result = $collection->find($filter, 0, 5000, false);
+        $lastIndex = 0;
+        $naturalOrderTestPassed = true;
+        foreach ($result as $document) {
+            if ($document->index < $lastIndex) {
+                $naturalOrderTestPassed = false;
+            }
+            $lastIndex = $document->index;
+        }
+        $should = 'When we try to filter a collection, we should retrieve them in natural order by when configured.';
+        $this->assert($naturalOrderTestPassed, $should);
+
+        $result = $collection->find($filter);
+        $should = 'When we try to filter a collection, we should have an offeset of 0 and lenght of 10 by default.';
+        $this->assert(
+            $result[0]->index === $firstIndex
+            && count($result) === 10,
+            $should
+        );
+    }
+
+    /**
+     * Tests firedb\collection::find(null) functionality.
+     * @return void
+     */
+    public function testFindAllDocuments() {
+
+    }
 
     private function _insertFiveThousandDocuments() {
-        suite::log('Inserting 5000 Documents Into Database...');
+        Suite::log('Inserting 5000 Documents Into Database...');
         $collection = $this->_db->collection('myCollection');
         $ones = 0;
         for ($i = 0; $i < 5000; $i++) {
@@ -202,7 +255,7 @@ class DatabaseIntegration extends testcase {
             }
             $doc = $collection->insert($document);
         }
-        suite::log('[Done]');
+        Suite::log('Finished Inserting 5000 Documents');
         return $ones;
     }
 

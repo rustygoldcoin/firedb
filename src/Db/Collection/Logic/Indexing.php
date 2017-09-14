@@ -1,15 +1,16 @@
 <?php
 
-namespace firedb\collection\logic;
+namespace Fire\Db\Collection\Logic;
 
-use firedb\collection\helper\filesystem;
-use firedb\FireDbException;
+use Fire\Db\Collection\Helper\FileSystem;
+use Fire\FireDbException;
 
 /**
  * This helper class contains the logic required for indexing.
  */
 
-class indexing {
+class Indexing
+{
 
     /**
      * Constants
@@ -17,15 +18,16 @@ class indexing {
     const INDEX_SIZE_LIMIT = 2500;
 
     /**
-     * @var firedb\collection\helper\filesystem
+     * @var Fire\Db\Collection\Helper\FileSystem
      */
     private $_filesystem;
 
     /**
      * The Constructor
-     * @param firedb\collection\helper\filesystem $filesystem
+     * @param Fire\Db\Collection\Helper\FileSystem $filesystem
      */
-    public function __construct(filesystem $filesystem) {
+    public function __construct(FileSystem $filesystem)
+    {
         $this->_filesystem = $filesystem;
 
         $metaData = $this->_filesystem->getCollectionMetaData();
@@ -44,7 +46,8 @@ class indexing {
      * @param array $indexable
      * @throws firedb\FireDbException If $indexable is not an array
      */
-    public function setIndexable($indexable) {
+    public function setIndexable($indexable)
+    {
         if (!is_array($indexable)) {
             throw new FireDbException('Indexable values should be configured as an array of indexable properties.');
         }
@@ -57,7 +60,8 @@ class indexing {
      * Returns the current indexable properties list.
      * @return array
      */
-    public function getIndexable() {
+    public function getIndexable()
+    {
         $metaData = $this->_filesystem->getCollectionMetaData();
         return $metaData->indexable;
     }
@@ -67,7 +71,8 @@ class indexing {
      * @param string $indexLookupId
      * @return array
      */
-    public function buildIndexByLookupId($indexLookupId) {
+    public function buildIndexByLookupId($indexLookupId)
+    {
         $indexIdsList = $this->_filesystem->getIndex($indexLookupId);
         $indexIds = (!empty($indexIdsList)) ? $this->_convertIndexToArray($indexIdsList) : [];
         $indexes = array_map([$this->_filesystem, 'getIndex'], $indexIds);
@@ -83,7 +88,8 @@ class indexing {
      * @param boolean $reverseOrder
      * @return array
      */
-    public function getCollectionIndexedRegistry($offset, $length, $reverseOrder) {
+    public function getCollectionIndexedRegistry($offset, $length, $reverseOrder)
+    {
         $metaData = $this->_filesystem->getCollectionMetaData();
         $registryLookupId = $metaData->registry;
         $indexLookupList = $this->_filesystem->getIndex($registryLookupId);
@@ -115,7 +121,8 @@ class indexing {
      * @param object $document
      * @return void
      */
-    public function indexDocument($document) {
+    public function indexDocument($document)
+    {
         $metaData = $this->_filesystem->getCollectionMetaData();
         $registry = $metaData->registry;
         foreach (get_object_vars($document) as $property => $value) {
@@ -138,7 +145,8 @@ class indexing {
      * @param  object $document
      * @return void
      */
-    public function removeDocumentIndex($document) {
+    public function removeDocumentIndex($document)
+    {
         //@todo add logic to remove a document from indexes it belongs to
     }
 
@@ -148,7 +156,8 @@ class indexing {
      * @param  mixed $value    [description]
      * @return string
      */
-    public function generateIndexLookupId($property, $value) {
+    public function generateIndexLookupId($property, $value)
+    {
         $propHash = md5($property);
         $valHash = md5($value);
         $combinedHash = $propHash . $valHash;
@@ -161,7 +170,8 @@ class indexing {
      * @param string $indexLookupId
      * @param string $documentId
      */
-    private function _addDocumentToIndex($indexLookupId, $documentId) {
+    private function _addDocumentToIndex($indexLookupId, $documentId)
+    {
         $indexLookup = $this->_filesystem->getIndex($indexLookupId);
         //if the indexLookup is empty we need to create one
         if (empty($indexLookup)) {
@@ -188,7 +198,8 @@ class indexing {
      * @param mixed $value
      * @return boolean
      */
-    private function _isValueIndexable($value) {
+    private function _isValueIndexable($value)
+    {
         return (
             is_string($value)
             || is_null($value)
@@ -202,7 +213,8 @@ class indexing {
      * @param string $property
      * @return boolean
      */
-    private function _isPropertyIndexable($property) {
+    private function _isPropertyIndexable($property)
+    {
         $metaData = $this->_filesystem->getCollectionMetaData();
         $indexable = $metaData->indexable;
         $indexBlacklist = ['__id', '__revision', '__timestamp'];
@@ -215,7 +227,8 @@ class indexing {
      * @param string $index
      * @return array
      */
-    private function _convertIndexToArray($index) {
+    private function _convertIndexToArray($index)
+    {
         return array_filter(explode(',', $index));
     }
 
@@ -224,7 +237,8 @@ class indexing {
      * @param  array $index
      * @return string
      */
-    private function _convertIndexToString($index) {
+    private function _convertIndexToString($index)
+    {
         return implode(',', $index) . ',';
     }
 
@@ -232,7 +246,8 @@ class indexing {
      * Generates a unique id for an index.
      * @return string
      */
-    private function _generateIndexId() {
+    private function _generateIndexId()
+    {
         $id = $this->_filesystem->generateUniqueId();
         return md5($id);
     }

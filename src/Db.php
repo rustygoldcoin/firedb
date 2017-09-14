@@ -1,29 +1,31 @@
 <?php
-namespace firedb;
+namespace Fire;
 
-use firedb\collection;
-use firedb\FireDbException;
+use Fire\Db\Collection;
+use Fire\FireDbException;
 
-class db {
+class Db
+{
 
     /**
      * The database directory
      * @var string
      */
-    protected $_dbDir;
+    private $_dbDir;
 
     /**
      * An array of collection objects.
      * @var array
      */
-    protected $_collections;
+    private $_collections;
 
     /**
      * The constructor
      * @param string $dir The directory of the database
      * @throws FireDbException If we cannot write to the database directory
      */
-    public function __construct($dir) {
+    public function __construct($dir)
+    {
         $this->_dbDir = $dir;
         $this->_collections = [];
 
@@ -37,13 +39,14 @@ class db {
      * @param string $collectionName The collection name
      * @return collection
      */
-    public function collection($collectionName) {
+    public function collection($collectionName)
+    {
         $collectionDir = $this->_getCollectionDir($collectionName);
         if (!$this->has($collectionName)) {
             mkdir($collectionDir);
         }
         if (!isset($this->_collections[$collectionName])) {
-            $this->_collections[$collectionName] = new collection($collectionDir);
+            $this->_collections[$collectionName] = new Collection($collectionDir);
         }
 
         return $this->_collections[$collectionName];
@@ -54,7 +57,8 @@ class db {
      * @param string $collectionName The collection name
      * @return boolean
      */
-    public function has($collectionName) {
+    public function has($collectionName)
+    {
         $collectionDir = $this->_getCollectionDir($collectionName);
         return file_exists($collectionDir) && is_dir($collectionDir);
     }
@@ -64,7 +68,8 @@ class db {
      * @param string $collectionName The collection name
      * @return string
      */
-    protected function _getCollectionDir($collectionName) {
+    private function _getCollectionDir($collectionName)
+    {
         return $this->_dbDir . '/' . $collectionName;
     }
 

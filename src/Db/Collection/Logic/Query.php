@@ -1,35 +1,37 @@
 <?php
 
-namespace firedb\collection\logic;
+namespace Fire\Db\Collection\Logic;
 
-use firedb\collection\helper\filesystem;
-use firedb\collection\logic\indexing;
-use firedb\FireDbException;
+use Fire\Db\Collection\Helper\FileSystem;
+use Fire\Db\Collection\Logic\Indexing;
+use Fire\FireDbException;
 
 /**
  * This helper class is used to contain all query logic for the collection.
  */
 
-class query {
+class Query
+{
 
     /**
      * Filesystem helper
-     * @var firedb\collection\helper\filesystem
+     * @var Fire\Db\Collection\Helper\FileSystem
      */
     private $_filesystem;
 
     /**
      * Indexing logic helper
-     * @var firedb\collection\logic\indexing
+     * @var Fire\Db\Collection\Logic\Indexing
      */
     private $_indexing;
 
     /**
      * The Constructor
-     * @param firedb\collection\helper\filesystem $filesystem
+     * @param Fire\Db\Collection\Helper\FileSystem $filesystem
      * @param firedb\collection\logic\indexing $indexing
      */
-    public function __construct(filesystem $filesystem, indexing $indexing) {
+    public function __construct(FileSystem $filesystem, Indexing $indexing)
+    {
         $this->_filesystem = $filesystem;
         $this->_indexing = $indexing;
     }
@@ -40,7 +42,8 @@ class query {
      * @param string $documentId
      * @return object
      */
-    public function upsertDocument($document, $documentId = null) {
+    public function upsertDocument($document, $documentId = null)
+    {
         if (!is_object($document)) {
             throw new FireDbException('The document you are trying to insert/update must be an object.');
         }
@@ -59,7 +62,8 @@ class query {
      * @param  string $documentId
      * @return object|null
      */
-    public function getDocument($documentId) {
+    public function getDocument($documentId)
+    {
         return $this->_filesystem->getDocument($documentId);
     }
 
@@ -71,7 +75,8 @@ class query {
      * @param  boolean $reverseOrder
      * @return array
      */
-    public function getDocumentsByFilter($filterObj, $offset, $length, $reverseOrder) {
+    public function getDocumentsByFilter($filterObj, $offset, $length, $reverseOrder)
+    {
         $documentIds = [];
         foreach (get_object_vars($filterObj) as $property => $value) {
             $indexLookupId = $this->_indexing->generateIndexLookupId($property, $value);
@@ -103,7 +108,8 @@ class query {
      * @param boolean $reverseOrder
      * @return array
      */
-    public function getAllDocuments($offset, $length, $reverseOrder) {
+    public function getAllDocuments($offset, $length, $reverseOrder)
+    {
         $documentIds = $this->_indexing->getCollectionIndexedRegistry($offset, $length, $reverseOrder);
         return $this->_mapDocuments($documentIds);
     }
@@ -113,7 +119,8 @@ class query {
      * @param string $documentId
      * @return void
      */
-    public function deleteDocument($documentId) {
+    public function deleteDocument($documentId)
+    {
         if ($this->_filesystem->documentExists($document->__id)) {
             $currentDocument = $this->_filesystem->getDocument($document->__id);
             $this->_indexing->removeDocumentIndex($currentDocument);
@@ -126,7 +133,8 @@ class query {
      * @param  array $documentIds
      * @return array
      */
-    private function _mapDocuments($documentIds) {
+    private function _mapDocuments($documentIds)
+    {
         $documentObjects = array_filter(array_map([$this, 'getDocument'], $documentIds));
         return $documentObjects;
     }

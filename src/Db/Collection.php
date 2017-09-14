@@ -1,28 +1,29 @@
 <?php
-namespace firedb;
+namespace Fire\Db;
 
-use firedb\collection\helper\filesystem;
-use firedb\collection\logic\indexing;
-use firedb\collection\logic\query;
-use firedb\FireDbException;
+use Fire\Db\Collection\Helper\FileSystem;
+use Fire\Db\Collection\Logic\Indexing;
+use Fire\Db\Collection\Logic\Query;
+use Fire\FireDbException;
 
-class collection {
+class Collection
+{
 
     /**
      * Filesystem helper
-     * @var firedb\collection\helper\filesystem
+     * @var Fire\Db\Collection\Helper\FileSystem
      */
     private $_filesystem;
 
     /**
      * Index logic helper
-     * @var firedb\collection\logic\indexing
+     * @var Fire\Db\Collection\Logic\Indexing
      */
     private $_indexing;
 
     /**
      * Query logic helper
-     * @var firedb\collection\logic\query
+     * @var Fire\Db\Collection\Logic\Query
      */
     private $_query;
 
@@ -30,10 +31,11 @@ class collection {
      * Class constructor
      * @param string $directory The path to the collection in the filesystem
      */
-    public function __construct($directory) {
-        $this->_filesystem = new filesystem($directory);
-        $this->_indexing = new indexing($this->_filesystem);
-        $this->_query = new query($this->_filesystem, $this->_indexing);
+    public function __construct($directory)
+    {
+        $this->_filesystem = new FileSystem($directory);
+        $this->_indexing = new Indexing($this->_filesystem);
+        $this->_query = new Query($this->_filesystem, $this->_indexing);
     }
 
     /**
@@ -58,7 +60,8 @@ class collection {
      *  3) Returns an array of all documents within the collection:
      *     $collection->find(null);
      */
-    public function find($filter = null, $offset = 0, $length = 10, $reverseOrder = true) {
+    public function find($filter = null, $offset = 0, $length = 10, $reverseOrder = true)
+    {
         if (is_string($filter)) {
             return $this->_query->getDocument($filter);
         } else if (is_object($filter)) {
@@ -81,7 +84,8 @@ class collection {
      * ];
      * $collection->insert($document);
      */
-    public function insert($document) {
+    public function insert($document)
+    {
         return $this->_query->upsertDocument($document, null);
     }
 
@@ -98,7 +102,8 @@ class collection {
      * ];
      * $collection->update('201708250622024656847159a0247a71b12', $document);
      */
-    public function update($id, $document) {
+    public function update($id, $document)
+    {
         return $this->_query->upsertDocument($document, $id);
     }
 
@@ -110,7 +115,8 @@ class collection {
      * Example:
      * $collection->delete('201708250622024656847159a0247a71b12');
      */
-    public function delete($documentId) {
+    public function delete($documentId)
+    {
         $this->_query->deleteDocument($documentId);
     }
 
@@ -127,7 +133,8 @@ class collection {
      * ];
      * $collection->setIndexable($indexable);
      */
-    public function setIndexable($indexable) {
+    public function setIndexable($indexable)
+    {
         $this->_indexing->setIndexable($indexable);
     }
 
@@ -138,7 +145,9 @@ class collection {
      * Example:
      * $indexable = $collection->getIndexable();
      */
-    public function getIndexable() {
+    public function getIndexable()
+    {
         return $this->_indexing->getIndexable();
     }
+
 }
