@@ -1,0 +1,6 @@
+1) Create new setConfiguration and getConfiguration method to add a confirguration object to meta data and pull it from there.
+2) Update remove setIndexable and getIndexable from Collection API, but keep it in the indexing logic to make it easy to pull from.
+3) Finish removeIndex method from the indexing logic class.
+4) Update deleteDocument to remove the documentid from the registry.
+5) Write integration tests for delete.
+6) Write integration tests for removing index.

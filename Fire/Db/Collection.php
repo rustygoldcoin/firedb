@@ -150,4 +150,15 @@ class Collection
         return $this->_indexing->getIndexable();
     }
 
+
+    public function setConfiguration()
+    {
+
+    }
+
+    public function getConfiguration()
+    {
+        
+    }
+
 }
