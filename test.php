@@ -11,6 +11,7 @@ $configObj = (object) [
         'testing'
     ]
 ];
-$config = new Fire\Db\Collection\Config($configObj);
+$config = new Fire\Db\Collection\Config();
+$config->setIndexable(['rand']);
 $collection->setConfiguration($config);
 var_dump($collection->getConfiguration());

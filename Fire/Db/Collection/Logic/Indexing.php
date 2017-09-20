@@ -32,31 +32,6 @@ class Indexing
     }
 
     /**
-     * Sets what properties should be indexable on objects being inserted or updated in the collection.
-     * @param array $indexable
-     * @throws firedb\FireDbException If $indexable is not an array
-     */
-    public function setIndexable($indexable)
-    {
-        if (!is_array($indexable)) {
-            throw new FireDbException('Indexable values should be configured as an array of indexable properties.');
-        }
-        $metaData = $this->_filesystem->getCollectionMetaData();
-        $metaData->indexable = $indexable;
-        $this->_filesystem->writeCollectionMetaData($metaData);
-    }
-
-    /**
-     * Returns the current indexable properties list.
-     * @return array
-     */
-    public function getIndexable()
-    {
-        $metaData = $this->_filesystem->getCollectionMetaData();
-        return $metaData->indexable;
-    }
-
-    /**
      * Returns an index by the lookup id.
      * @param string $indexLookupId
      * @return array
@@ -206,7 +181,7 @@ class Indexing
     private function _isPropertyIndexable($property)
     {
         $metaData = $this->_filesystem->getCollectionMetaData();
-        $indexable = $metaData->config->indexable;
+        $indexable = $metaData->config->getIndexable();
         $indexBlacklist = ['__id', '__revision', '__timestamp'];
         $indexableList = is_array($indexable) ? $indexable : [];
         return !in_array($property, $indexBlacklist) && in_array($property, $indexableList);

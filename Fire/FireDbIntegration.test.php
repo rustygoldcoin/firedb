@@ -144,11 +144,8 @@ class FireDbIntegration extends TestCase {
      */
     public function testFindDocumentByFilter() {
         $collection = $this->_db->collection('myCollection');
-        $config = new Config((object) [
-            'indexable' => [
-                'rand'
-            ]
-        ]);
+        $config = $collection->getConfiguration();
+        $config->setIndexable(['rand']);
         $collection->setConfiguration($config);
         $countOnesInserted = $this->_insertFiveThousandDocuments();
         $filter = (object) [
