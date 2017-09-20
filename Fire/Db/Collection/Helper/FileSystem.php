@@ -3,6 +3,7 @@
 namespace Fire\Db\Collection\Helper;
 
 use DateTime;
+use Fire\Db\Collection\Config;
 
 /**
  * This is a helper class to model the filesystem and handle reads/writes for the collection.
@@ -81,7 +82,9 @@ class FileSystem
         //if the collection meta data file is missing, create it
         if (!$this->collectionMetaDataExists()) {
             $metaData = (object) [
-                'name' => basename($this->_dir)
+                'name' => basename($this->_dir),
+                'config' => new Config(),
+                'registry' => md5($this->generateUniqueId())
             ];
             $this->writeCollectionMetaData($metaData);
         }
@@ -115,7 +118,7 @@ class FileSystem
      */
     public function writeCollectionMetaData($metaData)
     {
-        $this->_meataData = false;
+        $this->_metaData = false;
         $this->_writePhpObjectFile($this->_metaFile, $metaData);
     }
 
@@ -240,6 +243,19 @@ class FileSystem
     {
         $indexFile = $this->_indexDir . '/' . $indexId;
         $this->_writeFile($indexFile, $index);
+    }
+
+    public function setConfiguration(Config $config)
+    {
+        $metaData = $this->getCollectionMetaData();
+        $metaData->config = $config;
+        $this->writeCollectionMetaData($metaData);
+    }
+
+    public function getConfiguration()
+    {
+        $metaData = $this->getCollectionMetaData();
+        return $metaData->config;
     }
 
     /**

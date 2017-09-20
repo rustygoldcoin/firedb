@@ -29,16 +29,6 @@ class Indexing
     public function __construct(FileSystem $filesystem)
     {
         $this->_filesystem = $filesystem;
-
-        $metaData = $this->_filesystem->getCollectionMetaData();
-        if (!isset($metaData->indexable)) {
-            $metaData->indexable = [];
-            $this->_filesystem->writeCollectionMetaData($metaData);
-        }
-        if (!isset($metaData->registry)) {
-            $metaData->registry = $this->_generateIndexId();
-            $this->_filesystem->writeCollectionMetaData($metaData);
-        }
     }
 
     /**
@@ -123,8 +113,6 @@ class Indexing
      */
     public function indexDocument($document)
     {
-        $metaData = $this->_filesystem->getCollectionMetaData();
-        $registry = $metaData->registry;
         foreach (get_object_vars($document) as $property => $value) {
             if (
                 $this->_isPropertyIndexable($property)
@@ -135,6 +123,8 @@ class Indexing
             }
         }
 
+        $metaData = $this->_filesystem->getCollectionMetaData();
+        $registry = $metaData->registry;
         if (!$this->_filesystem->documentExists($document->__id)) {
             $this->_addDocumentToIndex($registry, $document->__id);
         }
@@ -216,7 +206,7 @@ class Indexing
     private function _isPropertyIndexable($property)
     {
         $metaData = $this->_filesystem->getCollectionMetaData();
-        $indexable = $metaData->indexable;
+        $indexable = $metaData->config->indexable;
         $indexBlacklist = ['__id', '__revision', '__timestamp'];
         $indexableList = is_array($indexable) ? $indexable : [];
         return !in_array($property, $indexBlacklist) && in_array($property, $indexableList);

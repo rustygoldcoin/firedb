@@ -4,6 +4,7 @@ namespace Fire\Db;
 use Fire\Db\Collection\Helper\FileSystem;
 use Fire\Db\Collection\Logic\Indexing;
 use Fire\Db\Collection\Logic\Query;
+use Fire\Db\Collection\Config;
 use Fire\FireDbException;
 
 class Collection
@@ -76,7 +77,7 @@ class Collection
      * Inserts a document into the collection.
      * @param object $document The document you want to store
      * @return object The document updated with collection properties like "__id", "__revision", and "__created"
-     * @throws firedb\FireDbException If $document is not an object
+     * @throws Fire\FireDbException If $document is not an object
      *
      * Example:
      * $document = (object) [
@@ -94,7 +95,7 @@ class Collection
      * @param string $id The ID of the document you would like to update
      * @param object $document The document you want to store
      * @return object The document updated with collection properties like "__id", "__revision", and "__created"
-     * @throws firedb\FireDbException If $document is not an object
+     * @throws Fire\FireDbException If $document is not an object
      *
      * Example:
      * $document = (object) [
@@ -120,45 +121,14 @@ class Collection
         $this->_query->deleteDocument($documentId);
     }
 
-    /**
-     * Sets what properties should be allowed to be indexed on objects you are inserting/updating into the collection.
-     * @param array $indexable An array of properties that should be indexed
-     * @return void
-     * @throws firedb\FireDbException If $indexable is not an array
-     *
-     * Example:
-     * $indexable = [
-     *     'rand',
-     *     'name'
-     * ];
-     * $collection->setIndexable($indexable);
-     */
-    public function setIndexable($indexable)
+    public function setConfiguration(Config $config)
     {
-        $this->_indexing->setIndexable($indexable);
-    }
-
-    /**
-     * Returns the indexable values configured for the collection.
-     * @return array An array of indexable properties
-     *
-     * Example:
-     * $indexable = $collection->getIndexable();
-     */
-    public function getIndexable()
-    {
-        return $this->_indexing->getIndexable();
-    }
-
-
-    public function setConfiguration()
-    {
-
+        $this->_filesystem->setConfiguration($config);
     }
 
     public function getConfiguration()
     {
-        
+        return $this->_filesystem->getConfiguration();
     }
 
 }

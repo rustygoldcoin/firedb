@@ -5,6 +5,7 @@ use Fire\Test\TestCase;
 use Fire\FireDbException;
 use Fire\Db;
 use Fire\Db\Collection;
+use Fire\Db\Collection\Config;
 
 class FireDbIntegration extends TestCase {
 
@@ -84,38 +85,6 @@ class FireDbIntegration extends TestCase {
     }
 
     /**
-     * Tests firedb\collection::setIndexable() and firedb\collection::getIndexable() functionality.
-     * @return void
-     */
-    public function testConfigureCollectionIndexable() {
-        $collection = $this->_db->collection('myCollection');
-        try {
-            $collection->setIndexable((object)[]);
-        } catch (FireDbException $e) {
-            $should = 'We should get an error when we try to set indexable as an object.';
-            $this->assert($e instanceof FireDbException, $should);
-        }
-        try {
-            $collection->setIndexable('mydocument');
-        } catch (FireDbException $e) {
-            $should = 'We should get an error when we try to set indexable as a string.';
-            $this->assert($e instanceof FireDbException, $should);
-        }
-        try {
-            $collection->setIndexable(0);
-        } catch (FireDbException $e) {
-            $should = 'We should get an error when we try to set indexable as an interger.';
-            $this->assert($e instanceof FireDbException, $should);
-        }
-
-        $indexable = ['property'];
-        $collection->setIndexable($indexable);
-        $result = $collection->getIndexable();
-        $should = 'We should get back the same indexable configuration we just set.';
-        $this->assert($result === $indexable, $should);
-    }
-
-    /**
      * Tests firedb\collection::insert() functionality.
      * @return void
      */
@@ -175,7 +144,12 @@ class FireDbIntegration extends TestCase {
      */
     public function testFindDocumentByFilter() {
         $collection = $this->_db->collection('myCollection');
-        $collection->setIndexable(['rand']);
+        $config = new Config((object) [
+            'indexable' => [
+                'rand'
+            ]
+        ]);
+        $collection->setConfiguration($config);
         $countOnesInserted = $this->_insertFiveThousandDocuments();
         $filter = (object) [
             'rand' => 1
