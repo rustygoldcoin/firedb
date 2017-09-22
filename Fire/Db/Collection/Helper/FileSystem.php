@@ -22,43 +22,43 @@ class FileSystem
 
     /**
      * The location of the direcotry in the filesystem that represents the colletion.
-     * @var string
+     * @var String
      */
     private $_dir;
 
     /**
      * The meta file of the collection.
-     * @var string
+     * @var String
      */
     private $_metaFile;
 
     /**
      * The location of the directory where index data will be stored.
-     * @var string
+     * @var String
      */
     private $_indexDir;
 
     /**
      * The location of the directory where documents will be stored.
-     * @var string
+     * @var String
      */
     private $_docsDir;
 
     /**
      * The location of the directory where document meta data will be stored.
-     * @var string
+     * @var String
      */
     private $_metaDir;
 
     /**
      * Meta data loaded from the self::$_metaFile location.
-     * @var object|false
+     * @var Object|FALSE
      */
     private $_metaData;
 
     /**
      * The Constructor
-     * @param string $directory The location of the directory where the collection exists
+     * @param String $directory The location of the directory where the collection exists
      */
     public function __construct($directory)
     {
@@ -92,7 +92,7 @@ class FileSystem
 
     /**
      * Determines if collection meta data exists.
-     * @return boolean
+     * @return Boolean
      */
     public function collectionMetaDataExists()
     {
@@ -101,7 +101,7 @@ class FileSystem
 
     /**
      * Returns meta data from the filesystem.
-     * @return object
+     * @return Object
      */
     public function getCollectionMetaData()
     {
@@ -113,8 +113,7 @@ class FileSystem
 
     /**
      * Writes collection meta data to the filesystem.
-     * @param object $metaData
-     * @return void
+     * @param Object $metaData
      */
     public function writeCollectionMetaData($metaData)
     {
@@ -124,8 +123,8 @@ class FileSystem
 
     /**
      * Determines if a document exists in the filesystem.
-     * @param string $documentId
-     * @return boolean
+     * @param String $documentId
+     * @return Boolean
      */
     public function documentExists($documentId)
     {
@@ -134,8 +133,8 @@ class FileSystem
 
     /**
      * Returns a document's meta data.
-     * @param  string $documentId
-     * @return string
+     * @param  String $documentId
+     * @return String
      */
     public function getDocumentMetaData($documentId)
     {
@@ -145,9 +144,8 @@ class FileSystem
 
     /**
      * Writes a document's meta data.
-     * @param string $documentId
-     * @param string $documentMetaFile
-     * @return void
+     * @param String $documentId
+     * @param String $documentMetaFile
      */
     public function writeDocumentMetaData($documentId, $documentMetaFile)
     {
@@ -157,8 +155,8 @@ class FileSystem
 
     /**
      * Deletes a document's meta data from the file system.
-     * @param string $documentId
-     * @return void
+     * @param String $documentId
+     * @return Void
      */
     public function deleteDocumentMetaData($documentId)
     {
@@ -169,9 +167,9 @@ class FileSystem
 
     /**
      * Returns a document from the filesystem.
-     * @param string $documentId
-     * @param string $revision
-     * @return object
+     * @param String $documentId
+     * @param String $revision
+     * @return Object
      */
     public function getDocument($documentId, $revision = null)
     {
@@ -189,9 +187,9 @@ class FileSystem
 
     /**
      * Writes a document to the fileystem.
-     * @param sring $documendId
-     * @param object $document
-     * @return object
+     * @param String $documendId
+     * @param Object $document
+     * @return Object
      */
     public function writeDocument($documendId, $document)
     {
@@ -209,8 +207,8 @@ class FileSystem
 
     /**
      * Determines if an index exists in the filesystem.
-     * @param string $indexId
-     * @return boolean
+     * @param String $indexId
+     * @return Boolean
      */
     public function indexExists($indexId)
     {
@@ -220,8 +218,8 @@ class FileSystem
 
     /**
      * Returns an index file from the filesystem.
-     * @param  string $indexId
-     * @return string
+     * @param  String $indexId
+     * @return String
      */
     public function getIndex($indexId)
     {
@@ -235,9 +233,8 @@ class FileSystem
 
     /**
      * Writes an index file to the filesystem.
-     * @param string $indexId
-     * @param string $index
-     * @return void
+     * @param String $indexId
+     * @param String $index
      */
     public function writeIndex($indexId, $index)
     {
@@ -245,6 +242,10 @@ class FileSystem
         $this->_writeFile($indexFile, $index);
     }
 
+    /**
+     * Sets the configuration for the collection.
+     * @param Fire\Db\Collection\Config $config
+     */
     public function setConfiguration(Config $config)
     {
         $metaData = $this->getCollectionMetaData();
@@ -252,6 +253,10 @@ class FileSystem
         $this->writeCollectionMetaData($metaData);
     }
 
+    /**
+     * Gets the configuration for the collection.
+     * @return Fire\Db\Collection\Config
+     */
     public function getConfiguration()
     {
         $metaData = $this->getCollectionMetaData();
@@ -260,7 +265,7 @@ class FileSystem
 
     /**
      * Generates a unique id.
-     * @return string
+     * @return String
      */
     public function generateUniqueId()
     {
@@ -274,8 +279,8 @@ class FileSystem
 
     /**
      * Returns a php object from the filesystem.
-     * @param string $phpObjectFilePath
-     * @return object
+     * @param String $phpObjectFilePath
+     * @return Object
      */
     private function _getPhpObjectFile($phpObjectFilePath)
     {
@@ -284,9 +289,8 @@ class FileSystem
 
     /**
      * Writes a php object to the filesystem.
-     * @param string $phpObjectFilePath
-     * @param object $phpObj
-     * @return void
+     * @param String $phpObjectFilePath
+     * @param Object $phpObj
      */
     private function _writePhpObjectFile($phpObjectFilePath, $phpObj)
     {
@@ -295,8 +299,8 @@ class FileSystem
 
     /**
      * Returns a JSON file from the filesytem.
-     * @param string $jsonFilePath
-     * @return object
+     * @param String $jsonFilePath
+     * @return Object
      */
     private function _getJsonFile($jsonFilePath)
     {
@@ -305,9 +309,8 @@ class FileSystem
 
    /**
     * Writes a JSON file to the filesystem.
-    * @param string $jsonFilePath
-    * @param object $jsonObj
-    * @return void
+    * @param String $jsonFilePath
+    * @param Object $jsonObj
     */
     private function _writeJsonFile($jsonFilePath, $jsonObj)
     {
@@ -316,8 +319,8 @@ class FileSystem
 
    /**
     * Returns a file from the filesystem.
-    * @param string $filePath
-    * @return string
+    * @param String $filePath
+    * @return String
     */
     private function _getFile($filePath)
     {
@@ -326,9 +329,8 @@ class FileSystem
 
    /**
     * Writes a file to the filesystem.
-    * @param string $filePath
-    * @param string $file
-    * @return void
+    * @param String $filePath
+    * @param String $file
     */
     private function _writeFile($filePath, $file)
     {
@@ -340,7 +342,7 @@ class FileSystem
 
    /**
     * Generates a revision number.
-    * @return number
+    * @return Integer
     */
     private function _generateRevisionNumber()
     {
@@ -349,7 +351,7 @@ class FileSystem
 
    /**
     * Generates a timestamp.
-    * @return string
+    * @return String
     */
     private function _generateTimestamp()
     {

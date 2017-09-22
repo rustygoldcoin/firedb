@@ -6,23 +6,22 @@ use Fire\FireDbException;
 
 class Db
 {
-
     /**
      * The database directory
-     * @var string
+     * @var String
      */
     private $_dbDir;
 
     /**
      * An array of collection objects.
-     * @var array
+     * @var Array<Fire\Db\Collection>
      */
     private $_collections;
 
     /**
      * The constructor
-     * @param string $dir The directory of the database
-     * @throws FireDbException If we cannot write to the database directory
+     * @param String $dir The directory of the database
+     * @throws Fire\FireDbException If we cannot write to the database directory
      */
     public function __construct($dir)
     {
@@ -36,8 +35,8 @@ class Db
 
     /**
      * Provides access to a collection.
-     * @param string $collectionName The collection name
-     * @return collection
+     * @param String $collectionName The collection name
+     * @return Fire\Db\Collection
      */
     public function collection($collectionName)
     {
@@ -54,8 +53,8 @@ class Db
 
     /**
      * Deteremines if this database has this collection.
-     * @param string $collectionName The collection name
-     * @return boolean
+     * @param String $collectionName The collection name
+     * @return Boolean
      */
     public function has($collectionName)
     {
@@ -65,8 +64,8 @@ class Db
 
     /**
      * Returns the collection directory based on the collection name.
-     * @param string $collectionName The collection name
-     * @return string
+     * @param String $collectionName The collection name
+     * @return String
      */
     private function _getCollectionDir($collectionName)
     {

@@ -2,15 +2,10 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$db = new Fire\Db(__DIR__ . '/collections');
+$db = new Fire\Db(__DIR__ . '/collection');
 
 $collection = $db->collection('MyObjects');
 
-$configObj = (object) [
-    'indexable' => [
-        'testing'
-    ]
-];
 $config = new Fire\Db\Collection\Config();
 $config->setIndexable(['rand']);
 $collection->setConfiguration($config);

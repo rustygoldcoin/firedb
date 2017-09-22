@@ -30,7 +30,7 @@ class Collection
 
     /**
      * Class constructor
-     * @param string $directory The path to the collection in the filesystem
+     * @param String $directory The path to the collection in the filesystem
      */
     public function __construct($directory)
     {
@@ -41,11 +41,11 @@ class Collection
 
     /**
      * Find documents in the collection.
-     * @param string|object $filter The filter you want to use to apply to find documents
-     * @param integer $offset The offset you want to apply to the returned documents (used for pagination)
-     * @param integer $length The length of returned documents in the collection (used for pagination)
-     * @param boolean $reverseOrder The order in which the documents should be returned
-     * @return object|array<object>|null
+     * @param String|Object $filter The filter you want to use to apply to find documents
+     * @param Integer $offset The offset you want to apply to the returned documents (used for pagination)
+     * @param Integer $length The length of returned documents in the collection (used for pagination)
+     * @param Boolean $reverseOrder The order in which the documents should be returned
+     * @return Object|Array<Object>|NULL
      *
      * Example:
      * 1) Returns a single document if the document exists. Returns null if the document doesn't exist:
@@ -75,8 +75,8 @@ class Collection
 
     /**
      * Inserts a document into the collection.
-     * @param object $document The document you want to store
-     * @return object The document updated with collection properties like "__id", "__revision", and "__created"
+     * @param Object $document The document you want to store
+     * @return Object The document updated with collection properties like "__id", "__revision", and "__created"
      * @throws Fire\FireDbException If $document is not an object
      *
      * Example:
@@ -92,9 +92,9 @@ class Collection
 
     /**
      * Updates a document in the collection.
-     * @param string $id The ID of the document you would like to update
-     * @param object $document The document you want to store
-     * @return object The document updated with collection properties like "__id", "__revision", and "__created"
+     * @param String $id The ID of the document you would like to update
+     * @param Object $document The document you want to store
+     * @return Object The document updated with collection properties like "__id", "__revision", and "__created"
      * @throws Fire\FireDbException If $document is not an object
      *
      * Example:
@@ -110,8 +110,7 @@ class Collection
 
     /**
      * Deletes a document from the collection.
-     * @param  string $documentId The ID of the document you want to delete
-     * @return void
+     * @param  String $documentId The ID of the document you want to delete
      *
      * Example:
      * $collection->delete('201708250622024656847159a0247a71b12');
@@ -121,11 +120,27 @@ class Collection
         $this->_query->deleteDocument($documentId);
     }
 
+    /**
+     * Sets the configurations you would like to set for the database.
+     * @param Fire\Db\Collection\Config $config
+     *
+     * Example:
+     * $config = new Fire\Db\Collection\Config();
+     * $config->setIndexable(['rand']);
+     * $collection->setConfiguration($config);
+     */
     public function setConfiguration(Config $config)
     {
         $this->_filesystem->setConfiguration($config);
     }
 
+    /**
+     * Returns the current configuration for the collection.
+     * @return Fire\Db\Collection\Config
+     *
+     * Example:
+     * $config = $collection->getConfiguration();
+     */
     public function getConfiguration()
     {
         return $this->_filesystem->getConfiguration();

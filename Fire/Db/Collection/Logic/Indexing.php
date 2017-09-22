@@ -33,8 +33,8 @@ class Indexing
 
     /**
      * Returns an index by the lookup id.
-     * @param string $indexLookupId
-     * @return array
+     * @param String $indexLookupId
+     * @return Array
      */
     public function buildIndexByLookupId($indexLookupId)
     {
@@ -48,10 +48,10 @@ class Indexing
 
     /**
      * Returns a subset of a collection registry index.
-     * @param interger $offset
-     * @param interger $length
-     * @param boolean $reverseOrder
-     * @return array
+     * @param Interger $offset
+     * @param Interger $length
+     * @param Boolean $reverseOrder
+     * @return Array<String>
      */
     public function getCollectionIndexedRegistry($offset, $length, $reverseOrder)
     {
