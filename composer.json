@@ -20,7 +20,7 @@
     ],
     "type": "library",
     "scripts": {
-        "test": "php vendor/ua1-labs/firetest/scripts/runner.php Fire"
+        "test": "php vendor/ua1-labs/firetest/scripts/runner.php src"
     },
     "require": {},
     "require-dev": {
@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Fire\\": "Fire/"
+            "Fire\\": "src/Fire/"
         }
     }
 }

@@ -9,6 +9,8 @@ use Fire\Db\Collection\Config;
 
 class FireDbIntegration extends TestCase {
 
+    const SHOULD_CONNECTION_1 = '';
+
     /**
      * The collection directory.
      * @var string
@@ -112,8 +114,8 @@ class FireDbIntegration extends TestCase {
         $document = (object) [
             'id' => 'myDocument'
         ];
-        $should = 'When we insert a document, we should always get returned the same document.';
         $result = $collection->insert($document);
+        $should = 'When we insert a document, we should always get returned the same document.';
         $this->assert($result->id === 'myDocument', $should);
         $should = 'When we insert a document, we should always get a document back with an __id appended.';
         $this->assert(isset($result->__id), $should);
